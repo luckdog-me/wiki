@@ -9,6 +9,6 @@
     import { defineComponent } from 'vue';
 
     export default defineComponent({
-        name: 'the-foot'
+        name: 'the-footer'
     });
 </script>
