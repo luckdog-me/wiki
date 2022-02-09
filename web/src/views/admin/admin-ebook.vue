@@ -78,7 +78,7 @@
       const ebooks = ref();
       const pagination = ref({
         current: 1,
-        pageSize: 1001,
+        pageSize: 10,
         total: 0
       });
       const loading = ref(false);
@@ -166,6 +166,7 @@
         modalLoading.value = true;
 
         axios.post("/ebook/save", ebook.value).then((response) => {
+          modalLoading.value = false;
 
           const data = response.data;  //data=commonResp
           if(data.success){
@@ -177,6 +178,8 @@
               page: pagination.value.current,
               size: pagination.value.pageSize,
             });
+          } else {
+            message.error(data.message);
           }
         });
       };
