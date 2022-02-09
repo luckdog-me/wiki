@@ -4,9 +4,22 @@
             :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
     >
       <p>
-        <a-button type="primary" @click="add()" size="large">
-          新增
-        </a-button>
+        <a-form layout="inline" :model="param">
+          <a-form-item>
+            <a-input v-model:value="param.name" placeholder="名称">
+            </a-input>
+          </a-form-item>
+          <a-form-item>
+            <a-button type="primary" @click="handleQuery({page: 1, size: pagination.pageSize})">
+              查询
+            </a-button>
+          </a-form-item>
+          <a-form-item>
+            <a-button type="primary" @click="add()">
+              新增
+            </a-button>
+          </a-form-item>
+        </a-form>
       </p>
       <a-table
               :columns="columns"
@@ -25,7 +38,7 @@
               编辑
             </a-button>
             <a-popconfirm
-                    title="删除后不可恢复，确认删除？"
+                    title="删除后不可恢复，确认删除?"
                     ok-text="是"
                     cancel-text="否"
                     @confirm="handleDelete(record.id)"
@@ -34,7 +47,6 @@
                 删除
               </a-button>
             </a-popconfirm>
-
           </a-space>
         </template>
       </a-table>
@@ -75,6 +87,8 @@
   export default defineComponent({
     name: 'AdminEbook',
     setup() {
+      const param = ref();
+      param.value = {};
       const ebooks = ref();
       const pagination = ref({
         current: 1,
@@ -129,12 +143,13 @@
         axios.get("/ebook/list", {
           params: {
             page: params.page,
-            size: params.size
+            size: params.size,
+            name: param.value.name
           }
         }).then((response) => {
           loading.value = false;
           const data = response.data;
-          if (data.success){
+          if (data.success) {
             ebooks.value = data.content.list;
 
             // 重置分页按钮
@@ -143,7 +158,6 @@
           } else {
             message.error(data.message);
           }
-
         });
       };
 
@@ -164,16 +178,13 @@
       const modalLoading = ref(false);
       const handleModalOk = () => {
         modalLoading.value = true;
-
         axios.post("/ebook/save", ebook.value).then((response) => {
           modalLoading.value = false;
-
-          const data = response.data;  //data=commonResp
-          if(data.success){
+          const data = response.data; // data = commonResp
+          if (data.success) {
             modalVisible.value = false;
-            modalLoading.value = false;
 
-            //重新加载列表
+            // 重新加载列表
             handleQuery({
               page: pagination.value.current,
               size: pagination.value.pageSize,
@@ -191,6 +202,7 @@
         modalVisible.value = true;
         ebook.value = record
       };
+
       /**
        * 新增
        */
@@ -198,15 +210,12 @@
         modalVisible.value = true;
         ebook.value = {};
       };
-      /**
-       * 删除
-       */
+
       const handleDelete = (id: number) => {
         axios.delete("/ebook/delete/" + id).then((response) => {
-
-          const data = response.data;  //data=commonResp
-          if(data.success){
-            //重新加载列表
+          const data = response.data; // data = commonResp
+          if (data.success) {
+            // 重新加载列表
             handleQuery({
               page: pagination.value.current,
               size: pagination.value.pageSize,
@@ -223,11 +232,13 @@
       });
 
       return {
+        param,
         ebooks,
         pagination,
         columns,
         loading,
         handleTableChange,
+        handleQuery,
 
         edit,
         add,
@@ -236,6 +247,7 @@
         modalVisible,
         modalLoading,
         handleModalOk,
+
         handleDelete
       }
     }
