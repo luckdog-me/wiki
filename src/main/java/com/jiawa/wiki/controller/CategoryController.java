@@ -2,14 +2,15 @@ package com.jiawa.wiki.controller;
 
 import com.jiawa.wiki.req.CategoryQueryReq;
 import com.jiawa.wiki.req.CategorySaveReq;
-import com.jiawa.wiki.resp.CommonResp;
 import com.jiawa.wiki.resp.CategoryQueryResp;
+import com.jiawa.wiki.resp.CommonResp;
 import com.jiawa.wiki.resp.PageResp;
 import com.jiawa.wiki.service.CategoryService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * @Auther: jie
@@ -31,6 +32,14 @@ public class CategoryController {
         resp.setContent(list);
         return resp;
     }
+    @GetMapping("/all")
+    public CommonResp all(){
+        CommonResp<List<CategoryQueryResp>> resp = new CommonResp<>();
+        List<CategoryQueryResp> list = categoryService.all();
+        resp.setContent(list);
+        return resp;
+    }
+
 
     @PostMapping("/save")
     public CommonResp save(@Valid @RequestBody CategorySaveReq req){
