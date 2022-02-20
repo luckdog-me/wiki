@@ -2,8 +2,9 @@ package com.jiawa.wiki.mapper;
 
 import com.jiawa.wiki.domain.Doc;
 import com.jiawa.wiki.domain.DocExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface DocMapper {
     long countByExample(DocExample example);
@@ -19,4 +20,8 @@ public interface DocMapper {
     int updateByExampleSelective(@Param("record") Doc record, @Param("example") DocExample example);
 
     int updateByExample(@Param("record") Doc record, @Param("example") DocExample example);
+
+    void updateByPrimaryKey(Doc doc);
+
+    void deleteByPrimaryKey(Long id);
 }
