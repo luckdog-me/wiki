@@ -128,7 +128,7 @@
             onMounted(() => {
                 handleQueryCategory();
                 // handleQueryEbook();
-                
+
             });
 
             return {
