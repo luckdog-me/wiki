@@ -8,9 +8,10 @@ import com.jiawa.wiki.exception.BusinessException;
 import com.jiawa.wiki.exception.BusinessExceptionCode;
 import com.jiawa.wiki.mapper.UserMapper;
 import com.jiawa.wiki.req.UserQueryReq;
+import com.jiawa.wiki.req.UserResetPassordReq;
 import com.jiawa.wiki.req.UserSaveReq;
-import com.jiawa.wiki.resp.UserQueryResp;
 import com.jiawa.wiki.resp.PageResp;
+import com.jiawa.wiki.resp.UserQueryResp;
 import com.jiawa.wiki.util.CopyUtil;
 import com.jiawa.wiki.util.SnowFlake;
 import org.springframework.stereotype.Service;
@@ -106,5 +107,12 @@ public class UserService {
         } else {
             return userList.get(0);
         }
+    }
+/*
+修改密码
+ */
+    public void resetPassword(UserResetPassordReq req){
+        User user=CopyUtil.copy(req,User.class);
+        userMapper.updateByPrimaryKeySelective(user);
     }
 }
